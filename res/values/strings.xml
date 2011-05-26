@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello World, OrderSelect!</string>
+    <string name="app_name">AnyOrderOne</string>
+    <string name="SelectRest">Search for your restaurant</string>
+    <string name="AllRest">All Restaurants in your location</string>
+    <string name="selChoice">Select your choice</string>
+	<string name="textMap">textMap</string>    
+    <string name="Latitude">Latitude</string>
+    <string name="Longitude">Longitude</string>
+    <string name="no_notes">No Notes Yet</string>    
+    <string name="menu_insert">Add Note</string>
+    <string name="menu_delete">Delete Note</string>
+    <string name="title">Title</string>
+    <string name="body">Body</string>
+    <string name="confirm">Confirm</string>
+    <string name="edit_note">Edit Note</string>    
+    <string name="order_now">Order now</string>   
+    <string name="show_on_map">Show on Map</string>
+    <string name="call_now">Call now</string>
+    <string name="business_name">Business name</string>    
+    <string name="business_desc">About</string>   
+    <string name="business_address">Address</string>
+    <string name="business_phone">Phone</string>            
+</resources>
