@@ -12,6 +12,7 @@ public class OrderNow extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.rest_select);
+		
 		Button searchButton = (Button) findViewById(R.id.searchrest);
 		searchButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {

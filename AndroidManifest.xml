@@ -26,6 +26,8 @@
         <activity android:name=".StoreList"
                   android:label="@string/app_name" android:theme="@android:style/Theme.NoTitleBar" />                  
         <activity android:name=".ItemListByCategory"
-                  android:label="@string/app_name" android:theme="@android:style/Theme.NoTitleBar" />                  
+                  android:label="@string/app_name" android:theme="@android:style/Theme.NoTitleBar" />      
+        <activity android:name=".StoreSearch"
+                  android:label="@string/app_name" android:theme="@android:style/Theme.NoTitleBar" />                                  
     </application>
 </manifest>

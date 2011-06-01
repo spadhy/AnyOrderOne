@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.StringTokenizer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,7 +42,7 @@ import com.anyorderone.helpers.Constants;
 import com.anyorderone.helpers.InformationFetcher;
 
 public class StoreList extends ListActivity {
-	private List<BusinessInfo> businessInfos = new ArrayList<BusinessInfo>();
+	private List<BusinessInfo> businessInfos;
 	private static final int INSERT_ID = Menu.FIRST;
 	private static final int DELETE_ID = Menu.FIRST + 1;
 	// TODO Move the url value to database SQLLITE Database
@@ -59,8 +60,7 @@ public class StoreList extends ListActivity {
 	private LocationProvider locationProvider;
 	private Double mLat, mLong;
 
-	String searchStr = null;
-
+    String zipAdd="", types = "";
 	private final Handler handler = new Handler() {
 		@Override
 		public void handleMessage(final Message msg) {
@@ -90,7 +90,8 @@ public class StoreList extends ListActivity {
 		listView.setEmptyView(this.empty);
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
-			searchStr = extras.getString("SEARCHSTR");
+			zipAdd = extras.getString("ZIPADD");
+			types = extras.getString("TYPES").equals("ANY")?"":"&"+extras.getString("TYPES");			
 		}
 	}
 
@@ -99,6 +100,7 @@ public class StoreList extends ListActivity {
 	protected void onResume() {
 		super.onResume();
 		iFetcher = new InformationFetcher();
+		 businessInfos = new ArrayList<BusinessInfo>();
 		/*
 		 * this.locationManager = (LocationManager)
 		 * getSystemService(Context.LOCATION_SERVICE); this.locationProvider =
@@ -116,23 +118,23 @@ public class StoreList extends ListActivity {
 		 * , Toast.LENGTH_SHORT).show(); finish(); }
 		 */
 		try {
-//When search is done thru search page			
-			if (searchStr == null || searchStr.equals("")) {
-		        Geocoder gc= new Geocoder(getBaseContext(), Locale.getDefault());
-				System.out.println("Step 3" + searchStr);
-		        List<Address> addresses = gc.getFromLocationName(searchStr, 1);
-				System.out.println("Step 4" + addresses.size());
-				Double latitude= addresses.get(0).getLatitude();
-				Double longitude = addresses.get(0).getLongitude();					
-				System.out.println("Step 411" + latitude + "-->" + longitude);				
-				json = iFetcher.connect(latitude, longitude);
-			} else {
+			if (zipAdd == null || zipAdd.equals("")) {
 //When search is done current location
 				// json = iFetcher.connect(URL, mLat.toString(),
 				// mLong.toString());
 				json = iFetcher.connect();
-				int startFrom = getIntent().getIntExtra(
-						Constants.STARTFROM_EXTRA, 1);
+			} else {
+				//When search is done thru search page					
+		        Geocoder gc= new Geocoder(getBaseContext(), Locale.getDefault());
+		        String urlQueryStr = "";
+		        List<Address> addresses = gc.getFromLocationName(zipAdd , 1);
+//		        List<Address> addresses = gc.getFromLocationName("19380", 1);
+				Double latitude= addresses.get(0).getLatitude();
+				Double longitude = addresses.get(0).getLongitude();
+				
+				urlQueryStr = "?LATLONG=" +latitude+","+longitude +types;
+	        	System.out.println("-->" + urlQueryStr);				
+				json = iFetcher.connect(urlQueryStr);
 			}
 			fillData();
 		} catch (JSONException e) {
@@ -175,29 +177,44 @@ public class StoreList extends ListActivity {
 	}
 
 	private void getBusinessInfoObjects(JSONObject json) throws JSONException {
-		JSONArray jsonarr = json.getJSONArray("businessInfo");
-		Log.i("jsonarr Array 1-->", new Integer(jsonarr.length()).toString());
+		boolean array = true;
+		JSONArray jsonarr = new JSONArray();
 		BusinessInfo bInfo = new BusinessInfo();
-		for (int j = 0; j < jsonarr.length(); j++) {
-			bInfo = new BusinessInfo();
-			JSONObject jsonObj = jsonarr.getJSONObject(j);
-			Log.i("jsonObj -->", jsonObj.toString());
-			bInfo.name = jsonObj.getString("businessName");
-			bInfo.desc = jsonObj.getString("businessDesc");
-			JSONObject jsonObjAdd = jsonObj.getJSONObject("businessAddress");
-			bInfo.address = jsonObjAdd.getString("address1");
-			bInfo.city = jsonObjAdd.getString("city");
-			bInfo.state = jsonObjAdd.getString("state");
-			bInfo.zip = jsonObjAdd.getString("zip");
-			bInfo.phone = jsonObjAdd.getString("phone");
-			JSONObject jsonObjCat = jsonObj.getJSONObject("businessCatalog");
-			bInfo.catalogid = jsonObjCat.getString("id");
-			// returnArray[j] = bInfo.toString();
-			businessInfos.add(bInfo);
+		try{
+			jsonarr = json.getJSONArray("businessInfo");
+			Log.i("jsonarr Array 1-->", new Integer(jsonarr.length()).toString());
+		}catch (JSONException ex) {
+			array = false;
+		}
+		if (!array) {
+			JSONObject jsonObj = json.getJSONObject("businessInfo");
+			addBusinessInfo(jsonObj);
+		} else {
+			for (int j = 0; j < jsonarr.length(); j++) {
+				JSONObject jsonObj = jsonarr.getJSONObject(j);				
+				addBusinessInfo(jsonObj);
+			}
 		}
 		Log.i(StoreList.CLASSTAG, "bInfo  1-->" + businessInfos.size());
 	}
 
+	private void addBusinessInfo(JSONObject jsonObj) throws JSONException {
+		BusinessInfo bInfo = new BusinessInfo();
+		Log.i("jsonObj -->", jsonObj.toString());
+		bInfo.name = jsonObj.getString("businessName");
+		bInfo.desc = jsonObj.getString("businessDesc");
+		JSONObject jsonObjAdd = jsonObj.getJSONObject("businessAddress");
+		bInfo.address = jsonObjAdd.getString("address1");
+		bInfo.city = jsonObjAdd.getString("city");
+		bInfo.state = jsonObjAdd.getString("state");
+		bInfo.zip = jsonObjAdd.getString("zip");
+		bInfo.phone = jsonObjAdd.getString("phone");
+		JSONObject jsonObjCat = jsonObj.getJSONObject("businessCatalog");
+		bInfo.catalogid = jsonObjCat.getString("id");
+		// returnArray[j] = bInfo.toString();
+		businessInfos.add(bInfo);
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);

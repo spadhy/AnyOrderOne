@@ -28,8 +28,8 @@ public final class R {
         public static final int callnow=0x7f070016;
         public static final int categorylist=0x7f070004;
         public static final int cuisine=0x7f07001c;
-        public static final int edaddress=0x7f07001a;
-        public static final int edzip=0x7f07001b;
+        public static final int edaddress=0x7f070018;
+        public static final int edzip=0x7f07001a;
         public static final int empty=0x7f070009;
         public static final int emptyitem=0x7f070006;
         public static final int itemselect=0x7f070005;
@@ -42,7 +42,7 @@ public final class R {
         public static final int phone=0x7f070012;
         public static final int proceed=0x7f070007;
         public static final int relativeLayout1=0x7f070013;
-        public static final int restaurant_type=0x7f070019;
+        public static final int restaurant_type=0x7f07001b;
         public static final int searchBut=0x7f07001d;
         public static final int searchrest=0x7f07000a;
         public static final int spinner_item=0x7f07000c;
@@ -51,7 +51,7 @@ public final class R {
         public static final int titleBusinessDetails=0x7f07000e;
         public static final int titlePhone=0x7f070011;
         public static final int viewonmap=0x7f070015;
-        public static final int zip=0x7f070018;
+        public static final int zip=0x7f070019;
     }
     public static final class layout {
         public static final int all_store=0x7f030000;
