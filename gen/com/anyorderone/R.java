@@ -8,6 +8,9 @@
 package com.anyorderone;
 
 public final class R {
+    public static final class array {
+        public static final int cuisines=0x7f040000;
+    }
     public static final class attr {
     }
     public static final class drawable {
@@ -19,53 +22,96 @@ public final class R {
         public static final int wave_45=0x7f020005;
     }
     public static final class id {
-        public static final int LinearLayout01=0x7f05000e;
-        public static final int button1=0x7f050002;
-        public static final int button2=0x7f050003;
-        public static final int button3=0x7f05000d;
-        public static final int editText1=0x7f050006;
-        public static final int editText2=0x7f050009;
-        public static final int linearLayout1=0x7f050004;
-        public static final int linearLayout2=0x7f050007;
-        public static final int linearLayout3=0x7f05000a;
-        public static final int linearLayout4=0x7f05000b;
-        public static final int listViewStore=0x7f05000f;
-        public static final int mapview=0x7f050000;
-        public static final int relativeLayout1=0x7f05000c;
-        public static final int textMap=0x7f050001;
-        public static final int textView1=0x7f050005;
-        public static final int textView2=0x7f050008;
+        public static final int LinearLayout01=0x7f070001;
+        public static final int address=0x7f070017;
+        public static final int businessDetails=0x7f07000f;
+        public static final int callnow=0x7f070016;
+        public static final int categorylist=0x7f070004;
+        public static final int cuisine=0x7f07001c;
+        public static final int edaddress=0x7f07001a;
+        public static final int edzip=0x7f07001b;
+        public static final int empty=0x7f070009;
+        public static final int emptyitem=0x7f070006;
+        public static final int itemselect=0x7f070005;
+        public static final int linearLayout1=0x7f07000d;
+        public static final int linearLayout2=0x7f070010;
+        public static final int listViewStore=0x7f070002;
+        public static final int listrest=0x7f07000b;
+        public static final int mapview=0x7f070000;
+        public static final int ordernow=0x7f070014;
+        public static final int phone=0x7f070012;
+        public static final int proceed=0x7f070007;
+        public static final int relativeLayout1=0x7f070013;
+        public static final int restaurant_type=0x7f070019;
+        public static final int searchBut=0x7f07001d;
+        public static final int searchrest=0x7f07000a;
+        public static final int spinner_item=0x7f07000c;
+        public static final int textMap=0x7f070003;
+        public static final int textView1=0x7f070008;
+        public static final int titleBusinessDetails=0x7f07000e;
+        public static final int titlePhone=0x7f070011;
+        public static final int viewonmap=0x7f070015;
+        public static final int zip=0x7f070018;
     }
     public static final class layout {
         public static final int all_store=0x7f030000;
-        public static final int gpsmap=0x7f030001;
-        public static final int main=0x7f030002;
-        public static final int rest_select=0x7f030003;
-        public static final int store_details=0x7f030004;
-        public static final int storelist=0x7f030005;
+        public static final int copyofstorelist=0x7f030001;
+        public static final int gpsmap=0x7f030002;
+        public static final int itemlistbycategory=0x7f030003;
+        public static final int main=0x7f030004;
+        public static final int ordernow=0x7f030005;
+        public static final int rest_select=0x7f030006;
+        public static final int spinner_view=0x7f030007;
+        public static final int spinner_view_dropdown=0x7f030008;
+        public static final int store_details=0x7f030009;
+        public static final int storelist=0x7f03000a;
+        public static final int storesearch=0x7f03000b;
     }
     public static final class string {
-        public static final int AllRest=0x7f040003;
-        public static final int Latitude=0x7f040006;
-        public static final int Longitude=0x7f040007;
-        public static final int SelectRest=0x7f040002;
-        public static final int app_name=0x7f040001;
-        public static final int body=0x7f04000c;
-        public static final int business_address=0x7f040014;
-        public static final int business_desc=0x7f040013;
-        public static final int business_name=0x7f040012;
-        public static final int business_phone=0x7f040015;
-        public static final int call_now=0x7f040011;
-        public static final int confirm=0x7f04000d;
-        public static final int edit_note=0x7f04000e;
-        public static final int hello=0x7f040000;
-        public static final int menu_delete=0x7f04000a;
-        public static final int menu_insert=0x7f040009;
-        public static final int no_notes=0x7f040008;
-        public static final int order_now=0x7f04000f;
-        public static final int selChoice=0x7f040004;
-        public static final int show_on_map=0x7f040010;
-        public static final int textMap=0x7f040005;
-        public static final int title=0x7f04000b;
+        public static final int AllRest=0x7f050003;
+        public static final int Latitude=0x7f050006;
+        public static final int Longitude=0x7f050007;
+        public static final int SelectRest=0x7f050002;
+        public static final int alert_title=0x7f05001e;
+        public static final int app_name=0x7f050001;
+        public static final int body=0x7f05000d;
+        public static final int businessInfo=0x7f05000b;
+        public static final int business_address=0x7f050015;
+        public static final int business_desc=0x7f050014;
+        public static final int business_full_address=0x7f050016;
+        public static final int business_name=0x7f050013;
+        public static final int business_phone=0x7f050018;
+        public static final int business_zip=0x7f050017;
+        public static final int call_now=0x7f050012;
+        public static final int confirm=0x7f05000e;
+        public static final int edit_note=0x7f05000f;
+        public static final int hello=0x7f050000;
+        public static final int itemselect=0x7f05001b;
+        /**  ALL MESSAGE STRINGs 
+         */
+        public static final int location_not_supplied_message=0x7f05001d;
+        public static final int menu_delete=0x7f05000a;
+        public static final int menu_insert=0x7f050009;
+        public static final int no_notes=0x7f050008;
+        public static final int order_now=0x7f050010;
+        public static final int restaurant_type=0x7f05001c;
+        public static final int search_rest=0x7f050019;
+        public static final int selChoice=0x7f050004;
+        public static final int select_rest=0x7f05001a;
+        public static final int show_on_map=0x7f050011;
+        public static final int textMap=0x7f050005;
+        public static final int title=0x7f05000c;
+    }
+    public static final class style {
+        public static final int edit_text=0x7f060002;
+        public static final int intro_blurb=0x7f060000;
+        public static final int label=0x7f060001;
+        /**   this is the style for the container ListView, not the rows 
+  the rows are defined in code, see ReviewAdapter.ReviewListView 
+         */
+        public static final int review_list=0x7f060006;
+        public static final int spinner_item=0x7f060004;
+        public static final int spinner_item_dropdown=0x7f060005;
+        public static final int view_text=0x7f060003;
     }
 }

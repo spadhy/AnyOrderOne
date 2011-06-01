@@ -3,15 +3,28 @@
  */
 package com.anyorderone;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
+import android.app.ListActivity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
@@ -19,69 +32,170 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
-public class StoreList extends Activity {
-	private List<BusinessInfo> businessInfos; 
+import com.anyorderone.entities.BusinessInfo;
+import com.anyorderone.helpers.BusinessInfoAdapter;
+import com.anyorderone.helpers.Constants;
+import com.anyorderone.helpers.InformationFetcher;
+
+public class StoreList extends ListActivity {
+	private List<BusinessInfo> businessInfos = new ArrayList<BusinessInfo>();
 	private static final int INSERT_ID = Menu.FIRST;
 	private static final int DELETE_ID = Menu.FIRST + 1;
-	// TODO Move the url value to database
-	private static final String URL = "http://192.168.1.22:8080/ThisHastoWork/rest/businessinfolist";
-	private InformationFetcher iFetcher;
+	// TODO Move the url value to database SQLLITE Database
+	private static final String URL = "http://192.168.1.22:8080/ThisHastoWork/rest/businessinfolist/list";
 
+	private InformationFetcher iFetcher;
+	private static final String CLASSTAG = StoreList.class.getSimpleName();
+	private ProgressDialog progressDialog;
+
+	private TextView empty;
+	private JSONObject json;
+	private Context mCtx;
+
+	private LocationManager locationManager;
+	private LocationProvider locationProvider;
+	private Double mLat, mLong;
+
+	String searchStr = null;
+
+	private final Handler handler = new Handler() {
+		@Override
+		public void handleMessage(final Message msg) {
+			Log.v(Constants.LOGTAG, " " + StoreList.CLASSTAG
+					+ " worker thread done, setup ListAdapter");
+			progressDialog.dismiss();
+			if ((businessInfos == null) || (businessInfos.size() == 0)) {
+				empty.setText("No Data Found, please check with  other data");
+			} else {
+				BusinessInfoAdapter bInfoAdapter = new BusinessInfoAdapter(
+						StoreList.this, businessInfos);
+				setListAdapter(bInfoAdapter);
+			}
+		}
+	};
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.storelist);
-		iFetcher = new InformationFetcher(this);
-		JSONObject json = iFetcher.connect(URL);
-		ListView listView = (ListView) findViewById(R.id.listViewStore);
-		// By using setAdpater method in listview we an add string array in list.
+		Log.v(Constants.LOGTAG, " " + StoreList.CLASSTAG + " onCreate");
+		this.setContentView(R.layout.storelist);
+		this.empty = (TextView) findViewById(R.id.empty);
+		final ListView listView = getListView();
+		listView.setItemsCanFocus(false);
+		listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+		listView.setEmptyView(this.empty);
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			searchStr = extras.getString("SEARCHSTR");
+		}
+	}
+
+	@SuppressWarnings("unused")
+	@Override
+	protected void onResume() {
+		super.onResume();
+		iFetcher = new InformationFetcher();
+		/*
+		 * this.locationManager = (LocationManager)
+		 * getSystemService(Context.LOCATION_SERVICE); this.locationProvider =
+		 * this.locationManager.getProvider(LocationManager.GPS_PROVIDER); if
+		 * (this.locationProvider == null) { this.locationProvider =
+		 * this.locationManager.getProvider(LocationManager.NETWORK_PROVIDER); }
+		 * Log.v(Constants.LOGTAG, " " + StoreList.CLASSTAG +
+		 * "   locationProvider from criteria - "+ this.locationProvider); if
+		 * (this.locationProvider != null) {
+		 * this.locationManager.requestLocationUpdates
+		 * (this.locationProvider.getName(), 0, 0, this.locationListener); }
+		 * else { Log.e(Constants.LOGTAG, " " + StoreList.CLASSTAG +
+		 * "  NO LOCATION PROVIDER AVAILABLE"); Toast.makeText(this,
+		 * "Your application cannot continue, the GPS location provider is not available at this time."
+		 * , Toast.LENGTH_SHORT).show(); finish(); }
+		 */
 		try {
-			listView.setAdapter(new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, fillData(json)));
+//When search is done thru search page			
+			if (searchStr == null || searchStr.equals("")) {
+		        Geocoder gc= new Geocoder(getBaseContext(), Locale.getDefault());
+				System.out.println("Step 3" + searchStr);
+		        List<Address> addresses = gc.getFromLocationName(searchStr, 1);
+				System.out.println("Step 4" + addresses.size());
+				Double latitude= addresses.get(0).getLatitude();
+				Double longitude = addresses.get(0).getLongitude();					
+				System.out.println("Step 411" + latitude + "-->" + longitude);				
+				json = iFetcher.connect(latitude, longitude);
+			} else {
+//When search is done current location
+				// json = iFetcher.connect(URL, mLat.toString(),
+				// mLong.toString());
+				json = iFetcher.connect();
+				int startFrom = getIntent().getIntExtra(
+						Constants.STARTFROM_EXTRA, 1);
+			}
+			fillData();
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	protected void onListItemClick(ListView l, View v, int position, long id) {
-        // set the current item to the Application (global state placed there)
-        AnyOrderApplication application = (AnyOrderApplication) getApplication();
-        application.setCurrentBusinessInfo(this.businessInfos.get(position));
-        Intent intent = new Intent(StoreList.this, StoreDetails.class);   
-        startActivity(intent);
+		// set the current item to the Application (global state placed there)
+		AnyOrderApplication application = (AnyOrderApplication) getApplication();
+		application.setCurrentBusinessInfo(this.businessInfos.get(position));
+		BusinessInfo bInfo = application.getCurrentBusinessInfo();
+		Log.i(Constants.LOGTAG + "app bsiness info-->", bInfo.address);
+		Intent intent = new Intent(StoreList.this, StoreDetails.class);
+		startActivity(intent);
 	}
 
-	private String[] fillData(JSONObject json) throws JSONException {
-		// A Simple JSONObject Parsing
-		Log.i("Step 1 ",json.toString());
+	private void fillData() throws JSONException {
+		Log.v(Constants.LOGTAG, " " + StoreList.CLASSTAG + " filldata");
+		this.progressDialog = ProgressDialog.show(this, " Working...",
+				" Retrieving Businessless", true, false);
+		new Thread() {
+			@Override
+			public void run() {
+				try {
+					getBusinessInfoObjects(json);
+					for (int k = 0; k < businessInfos.size(); k++) {
+						System.out.println("Businessinfo object-->"
+								+ businessInfos.get(k).name);
+					}
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				handler.sendEmptyMessage(0);
+			}
+		}.start();
+	}
+
+	private void getBusinessInfoObjects(JSONObject json) throws JSONException {
 		JSONArray jsonarr = json.getJSONArray("businessInfo");
 		Log.i("jsonarr Array 1-->", new Integer(jsonarr.length()).toString());
-		
-		String[] returnArray = new String[jsonarr.length()];
 		BusinessInfo bInfo = new BusinessInfo();
 		for (int j = 0; j < jsonarr.length(); j++) {
+			bInfo = new BusinessInfo();
 			JSONObject jsonObj = jsonarr.getJSONObject(j);
 			Log.i("jsonObj -->", jsonObj.toString());
 			bInfo.name = jsonObj.getString("businessName");
-			bInfo.desc= jsonObj.getString("businessDesc");
+			bInfo.desc = jsonObj.getString("businessDesc");
 			JSONObject jsonObjAdd = jsonObj.getJSONObject("businessAddress");
-			Log.i("jsonarradd  1-->", jsonObjAdd.toString());
-			bInfo.address= jsonObjAdd.getString("address1");
-			bInfo.city= jsonObjAdd.getString("city");
-			bInfo.state= jsonObjAdd.getString("state");			
-			bInfo.zip= jsonObjAdd.getString("zip");			
-			bInfo.phone= jsonObjAdd.getString("phone");
-			Log.i("bInfo  1-->", bInfo.toString());
-			returnArray[j] = bInfo.toString();
-//			businessInfos.add(bInfo);
+			bInfo.address = jsonObjAdd.getString("address1");
+			bInfo.city = jsonObjAdd.getString("city");
+			bInfo.state = jsonObjAdd.getString("state");
+			bInfo.zip = jsonObjAdd.getString("zip");
+			bInfo.phone = jsonObjAdd.getString("phone");
+			JSONObject jsonObjCat = jsonObj.getJSONObject("businessCatalog");
+			bInfo.catalogid = jsonObjCat.getString("id");
+			// returnArray[j] = bInfo.toString();
+			businessInfos.add(bInfo);
 		}
-		Log.i("Return array -->", returnArray.toString());
-		return returnArray;
+		Log.i(StoreList.CLASSTAG, "bInfo  1-->" + businessInfos.size());
 	}
 
 	@Override
@@ -95,7 +209,6 @@ public class StoreList extends Activity {
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
 		case INSERT_ID:
-			createNote();
 			return true;
 		}
 
@@ -123,24 +236,30 @@ public class StoreList extends Activity {
 		return super.onContextItemSelected(item);
 	}
 
-	private void createNote() {
-		/*
-		 * Intent i = new Intent(this, NoteEdit.class);
-		 * startActivityForResult(i, ACTIVITY_CREATE);
-		 */}
-
-	/*
-	 * @Override protected void onListItemClick(ListView l, View v, int
-	 * position, long id) { //super.onListItemClick(l, v, position, id); Intent
-	 * i = new Intent(this, NoteEdit.class);
-	 * i.putExtra(NotesDbAdapter.KEY_ROWID, id); startActivityForResult(i,
-	 * ACTIVITY_EDIT); }
-	 */
-
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+	protected void onActivityResult(int requestCode, int resultCode,
+			Intent intent) {
 		super.onActivityResult(requestCode, resultCode, intent);
 		/* fillData(); */
 	}
+
+	private final LocationListener locationListener = new LocationListener() {
+
+		public void onLocationChanged(Location loc) {
+			mLat = loc.getLatitude();
+			mLong = loc.getLongitude();
+			Log.v(StoreList.CLASSTAG, "Lat+Long" + mLat + "--" + mLong);
+
+		}
+
+		public void onProviderDisabled(final String s) {
+		}
+
+		public void onProviderEnabled(final String s) {
+		}
+
+		public void onStatusChanged(final String s, final int i, final Bundle b) {
+		}
+	};
 
 }

@@ -11,6 +11,7 @@
     <string name="no_notes">No Notes Yet</string>    
     <string name="menu_insert">Add Note</string>
     <string name="menu_delete">Delete Note</string>
+	<string name="businessInfo">Business Info</string>    
     <string name="title">Title</string>
     <string name="body">Body</string>
     <string name="confirm">Confirm</string>
@@ -18,8 +19,23 @@
     <string name="order_now">Order now</string>   
     <string name="show_on_map">Show on Map</string>
     <string name="call_now">Call now</string>
+    
     <string name="business_name">Business name</string>    
     <string name="business_desc">About</string>   
     <string name="business_address">Address</string>
-    <string name="business_phone">Phone</string>            
+    <string name="business_full_address">Address, City, State</string>    
+    <string name="business_zip">Zip</string>
+    <string name="business_phone">Phone</string>
+    
+    <string name="search_rest">Search a restaurant to place your order thru android</string>                
+    <string name="select_rest">Select a restaurant to place your order thru android</string>
+    
+    <string name="itemselect">Select the item to purchase</string>
+    <string name="restaurant_type">Restaurant type</string>    
+<!-- ALL MESSAGE STRINGs -->    
+    <string name="location_not_supplied_message">Search location was not specified</string>
+    <string name="alert_title">Something wrong</string>    
+    
+    
 </resources>
+

@@ -1,6 +1,8 @@
 package com.anyorderone;
 
 import android.app.Application;
+
+import com.anyorderone.entities.BusinessInfo;
 /**
  * Extend Application for global state information for an application. Access the application via
  * Activity.getApplication().
@@ -37,5 +39,6 @@ public class AnyOrderApplication extends Application {
     public void setCurrentBusinessInfo(BusinessInfo currentBusinessInfo) {
         this.currentBusinessInfo = currentBusinessInfo;
     }
+
 
 }
