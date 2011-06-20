@@ -9,109 +9,207 @@ package com.anyorderone;
 
 public final class R {
     public static final class array {
+        public static final int businesses=0x7f040001;
         public static final int cuisines=0x7f040000;
     }
     public static final class attr {
+    }
+    public static final class color {
+        public static final int custom_black=0x7f070006;
+        public static final int custom_maroon=0x7f070003;
+        public static final int custom_orange=0x7f070005;
+        public static final int custom_red=0x7f070001;
+        public static final int custom_text=0x7f070002;
+        public static final int custom_theme_color=0x7f070000;
+        public static final int custom_white=0x7f070004;
     }
     public static final class drawable {
         public static final int art_licenses=0x7f020000;
         public static final int buoy=0x7f020001;
         public static final int icon=0x7f020002;
-        public static final int redpin=0x7f020003;
-        public static final int wave_200=0x7f020004;
-        public static final int wave_45=0x7f020005;
+        public static final int photo_album=0x7f020003;
+        public static final int photo_album1=0x7f020004;
+        public static final int photo_album2=0x7f020005;
+        public static final int photo_album3=0x7f020006;
+        public static final int photo_album4=0x7f020007;
+        public static final int redpin=0x7f020008;
+        public static final int wave_200=0x7f020009;
+        public static final int wave_45=0x7f02000a;
     }
     public static final class id {
-        public static final int LinearLayout01=0x7f070001;
-        public static final int address=0x7f070017;
-        public static final int businessDetails=0x7f07000f;
-        public static final int callnow=0x7f070016;
-        public static final int categorylist=0x7f070004;
-        public static final int cuisine=0x7f07001c;
-        public static final int edaddress=0x7f070018;
-        public static final int edzip=0x7f07001a;
-        public static final int empty=0x7f070009;
-        public static final int emptyitem=0x7f070006;
-        public static final int itemselect=0x7f070005;
-        public static final int linearLayout1=0x7f07000d;
-        public static final int linearLayout2=0x7f070010;
-        public static final int listViewStore=0x7f070002;
-        public static final int listrest=0x7f07000b;
-        public static final int mapview=0x7f070000;
-        public static final int ordernow=0x7f070014;
-        public static final int phone=0x7f070012;
-        public static final int proceed=0x7f070007;
-        public static final int relativeLayout1=0x7f070013;
-        public static final int restaurant_type=0x7f07001b;
-        public static final int searchBut=0x7f07001d;
-        public static final int searchrest=0x7f07000a;
-        public static final int spinner_item=0x7f07000c;
-        public static final int textMap=0x7f070003;
-        public static final int textView1=0x7f070008;
-        public static final int titleBusinessDetails=0x7f07000e;
-        public static final int titlePhone=0x7f070011;
-        public static final int viewonmap=0x7f070015;
-        public static final int zip=0x7f070019;
+        public static final int Gallery01=0x7f080001;
+        public static final int ImageView01=0x7f080002;
+        public static final int LinearLayout01=0x7f08000d;
+        public static final int ScrollView01=0x7f080009;
+        public static final int TextView01=0x7f080004;
+        public static final int address=0x7f08003a;
+        public static final int addtoOrder=0x7f080014;
+        public static final int all=0x7f080031;
+        public static final int androidArbit=0x7f08001d;
+        public static final int androidSearchRest=0x7f08001c;
+        public static final int breakfast=0x7f08002f;
+        public static final int btnSearch=0x7f080027;
+        public static final int businessAddress=0x7f08001f;
+        public static final int businessDetails=0x7f080036;
+        public static final int businessInfo=0x7f080003;
+        public static final int businessZip=0x7f080021;
+        public static final int businessinfo=0x7f080015;
+        public static final int callnow=0x7f080008;
+        public static final int categorylist=0x7f080019;
+        public static final int check1=0x7f08000c;
+        public static final int childname=0x7f08000a;
+        public static final int choice=0x7f080013;
+        public static final int clear=0x7f080032;
+        public static final int cuisine=0x7f080025;
+        public static final int dinner=0x7f080030;
+        public static final int edTxt=0x7f080020;
+        public static final int edaddress=0x7f08003b;
+        public static final int edzip=0x7f080022;
+        public static final int empty=0x7f080039;
+        public static final int emptyitem=0x7f08001b;
+        public static final int groupname=0x7f080010;
+        public static final int itemchoice=0x7f080011;
+        public static final int itemselect=0x7f08001a;
+        public static final int itemselect01=0x7f080018;
+        public static final int linearLayout1=0x7f08001e;
+        public static final int linearLayout2=0x7f080012;
+        public static final int linearLayout3=0x7f080023;
+        public static final int linearLayout4=0x7f080026;
+        public static final int listViewStore=0x7f08000e;
+        public static final int listrest=0x7f08002b;
+        public static final int lunch=0x7f08002d;
+        public static final int mapview=0x7f080000;
+        public static final int menu=0x7f08002e;
+        public static final int ordernow=0x7f080006;
+        public static final int phone=0x7f080038;
+        public static final int placeOrder=0x7f080017;
+        public static final int relativeLayout1=0x7f080005;
+        public static final int restaurant_type=0x7f080024;
+        public static final int rgb=0x7f08000b;
+        public static final int rotate=0x7f080033;
+        public static final int rowTextP1=0x7f080028;
+        public static final int rowTextP2=0x7f080029;
+        public static final int searchBut=0x7f08003d;
+        public static final int searchrest=0x7f08002a;
+        public static final int spinner_item=0x7f080034;
+        public static final int testbut=0x7f08002c;
+        public static final int textMap=0x7f08000f;
+        public static final int textView1=0x7f080016;
+        public static final int titleBusinessDetails=0x7f080035;
+        public static final int titlePhone=0x7f080037;
+        public static final int toggle1=0x7f08003f;
+        public static final int toggle2=0x7f08003e;
+        public static final int viewonmap=0x7f080007;
+        public static final int zip=0x7f08003c;
     }
     public static final class layout {
         public static final int all_store=0x7f030000;
-        public static final int copyofstorelist=0x7f030001;
-        public static final int gpsmap=0x7f030002;
-        public static final int itemlistbycategory=0x7f030003;
-        public static final int main=0x7f030004;
-        public static final int ordernow=0x7f030005;
-        public static final int rest_select=0x7f030006;
-        public static final int spinner_view=0x7f030007;
-        public static final int spinner_view_dropdown=0x7f030008;
-        public static final int store_details=0x7f030009;
-        public static final int storelist=0x7f03000a;
-        public static final int storesearch=0x7f03000b;
+        public static final int businesslist=0x7f030001;
+        public static final int child_row=0x7f030002;
+        public static final int copyofstorelist=0x7f030003;
+        public static final int gpsmap=0x7f030004;
+        public static final int group_row=0x7f030005;
+        public static final int itemattrselect=0x7f030006;
+        public static final int itemcart=0x7f030007;
+        public static final int itemlistbycategory=0x7f030008;
+        public static final int main=0x7f030009;
+        public static final int media_layout=0x7f03000a;
+        public static final int media_list_child=0x7f03000b;
+        public static final int media_list_parent=0x7f03000c;
+        public static final int ordernow=0x7f03000d;
+        public static final int radio_group_1=0x7f03000e;
+        public static final int rest_select=0x7f03000f;
+        public static final int spin_anim=0x7f030010;
+        public static final int spinner_view=0x7f030011;
+        public static final int spinner_view_dropdown=0x7f030012;
+        public static final int store_details=0x7f030013;
+        public static final int storelist=0x7f030014;
+        public static final int storesearch=0x7f030015;
+        public static final int table_layout_7=0x7f030016;
+        public static final int testactivity=0x7f030017;
     }
     public static final class string {
-        public static final int AllRest=0x7f050003;
-        public static final int Latitude=0x7f050006;
-        public static final int Longitude=0x7f050007;
-        public static final int SelectRest=0x7f050002;
-        public static final int alert_title=0x7f05001e;
-        public static final int app_name=0x7f050001;
-        public static final int body=0x7f05000d;
-        public static final int businessInfo=0x7f05000b;
-        public static final int business_address=0x7f050015;
-        public static final int business_desc=0x7f050014;
-        public static final int business_full_address=0x7f050016;
-        public static final int business_name=0x7f050013;
-        public static final int business_phone=0x7f050018;
-        public static final int business_zip=0x7f050017;
-        public static final int call_now=0x7f050012;
-        public static final int confirm=0x7f05000e;
-        public static final int edit_note=0x7f05000f;
-        public static final int hello=0x7f050000;
-        public static final int itemselect=0x7f05001b;
+        public static final int AllRest=0x7f050008;
+        public static final int Latitude=0x7f05000a;
+        public static final int Longitude=0x7f05000b;
+        /**  NORMAL TEXT  END
+         */
+        public static final int SelectRest=0x7f050007;
+        public static final int alert_title=0x7f050023;
+        /**  LABELS 
+         */
+        public static final int app_name=0x7f050000;
+        public static final int body=0x7f050011;
+        public static final int businessInfo=0x7f05000f;
+        public static final int business_address=0x7f05001a;
+        public static final int business_desc=0x7f050019;
+        public static final int business_full_address=0x7f05001b;
+        public static final int business_name=0x7f050018;
+        public static final int business_phone=0x7f05001d;
+        public static final int business_zip=0x7f05001c;
+        public static final int businesslist_screen=0x7f050002;
+        public static final int call_now=0x7f050017;
+        public static final int confirm=0x7f050012;
+        public static final int edit_note=0x7f050013;
+        public static final int hello=0x7f050006;
+        public static final int invalid_zip_supplied=0x7f050025;
+        public static final int itemchoice_screen=0x7f050004;
+        public static final int itemlist_screen=0x7f050003;
+        public static final int itemselect=0x7f050020;
         /**  ALL MESSAGE STRINGs 
          */
-        public static final int location_not_supplied_message=0x7f05001d;
-        public static final int menu_delete=0x7f05000a;
-        public static final int menu_insert=0x7f050009;
-        public static final int no_notes=0x7f050008;
-        public static final int order_now=0x7f050010;
-        public static final int restaurant_type=0x7f05001c;
-        public static final int search_rest=0x7f050019;
-        public static final int selChoice=0x7f050004;
-        public static final int select_rest=0x7f05001a;
-        public static final int show_on_map=0x7f050011;
-        public static final int textMap=0x7f050005;
-        public static final int title=0x7f05000c;
+        public static final int location_not_supplied_message=0x7f050022;
+        public static final int menu_delete=0x7f05000e;
+        public static final int menu_insert=0x7f05000d;
+        public static final int no_notes=0x7f05000c;
+        public static final int order_now=0x7f050014;
+        public static final int order_place=0x7f050015;
+        public static final int ordernow_screen=0x7f050001;
+        public static final int restaurant_type=0x7f050021;
+        public static final int search_rest=0x7f05001e;
+        /**  LABELS END 
+ NORMAL TEXT  
+         */
+        public static final int selChoice=0x7f050005;
+        public static final int select_rest=0x7f05001f;
+        public static final int show_on_map=0x7f050016;
+        public static final int textMap=0x7f050009;
+        public static final int title=0x7f050010;
+        public static final int unable_to_fetch_businesslist=0x7f050024;
     }
     public static final class style {
+        public static final int CustomTheme=0x7f060007;
+        public static final int CustomTheme_forstartnow=0x7f060008;
         public static final int edit_text=0x7f060002;
         public static final int intro_blurb=0x7f060000;
         public static final int label=0x7f060001;
-        /**   this is the style for the container ListView, not the rows 
-  the rows are defined in code, see ReviewAdapter.ReviewListView 
+        /**  this is the style for the container ListView, not the rows 
+ the rows are defined in code, see ReviewAdapter.ReviewListView 
          */
         public static final int review_list=0x7f060006;
         public static final int spinner_item=0x7f060004;
         public static final int spinner_item_dropdown=0x7f060005;
         public static final int view_text=0x7f060003;
     }
+    public static final class styleable {
+        /** Attributes that can be used with a Gallery1.
+           <p>Includes the following attributes:</p>
+           <table>
+           <colgroup align="left" />
+           <colgroup align="left" />
+           <tr><th>Attribute</th><th>Description</th></tr>
+           <tr><td><code>{@link #Gallery1_android_galleryItemBackground com.anyorderone:android_galleryItemBackground}</code></td><td></td></tr>
+           </table>
+           @see #Gallery1_android_galleryItemBackground
+         */
+        public static final int[] Gallery1 = {
+            0x0101004c
+        };
+        /**
+          <p>This symbol is the offset where the {@link com.anyorderone.R.attr#android_galleryItemBackground}
+          attribute's value can be found in the {@link #Gallery1} array.
+          @attr name android:android_galleryItemBackground
+        */
+        public static final int Gallery1_android_galleryItemBackground = 0;
+    };
 }

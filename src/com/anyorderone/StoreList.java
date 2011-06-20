@@ -7,22 +7,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.StringTokenizer;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
-import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.location.LocationProvider;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -36,17 +32,18 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.anyorderone.adapters.BusinessInfoAdapter;
 import com.anyorderone.entities.BusinessInfo;
-import com.anyorderone.helpers.BusinessInfoAdapter;
 import com.anyorderone.helpers.Constants;
 import com.anyorderone.helpers.InformationFetcher;
+import com.anyorderone.helpers.LocationHelper;
+import com.anyorderone.helpers.Utility;
 
 public class StoreList extends ListActivity {
 	private List<BusinessInfo> businessInfos;
 	private static final int INSERT_ID = Menu.FIRST;
 	private static final int DELETE_ID = Menu.FIRST + 1;
 	// TODO Move the url value to database SQLLITE Database
-	private static final String URL = "http://192.168.1.22:8080/ThisHastoWork/rest/businessinfolist/list";
 
 	private InformationFetcher iFetcher;
 	private static final String CLASSTAG = StoreList.class.getSimpleName();
@@ -54,24 +51,32 @@ public class StoreList extends ListActivity {
 
 	private TextView empty;
 	private JSONObject json;
-	private Context mCtx;
 
-	private LocationManager locationManager;
-	private LocationProvider locationProvider;
-	private Double mLat, mLong;
-
-    String zipAdd="", types = "";
+	private boolean filldata = true;
+	String zipAdd = "", types = "", names = "";
+	
 	private final Handler handler = new Handler() {
 		@Override
 		public void handleMessage(final Message msg) {
-			Log.v(Constants.LOGTAG, " " + StoreList.CLASSTAG
-					+ " worker thread done, setup ListAdapter");
+			Log.v(Constants.LOGTAG, " " + StoreList.CLASSTAG + " worker thread done, setup ListAdapter");
 			progressDialog.dismiss();
+			if (!filldata) {
+				StringBuilder validationText = new StringBuilder();
+				validationText.append(getResources().getString(R.string.unable_to_fetch_businesslist));
+				new AlertDialog.Builder(getBaseContext()).setTitle(getResources().getString(R.string.alert_title))
+						.setMessage(validationText.toString())
+						.setPositiveButton("Continue", new android.content.DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int arg1) {
+								// in this case, don't need to do anything other
+								// than close alert
+							}
+						}).show();
+				validationText = null;
+			}
 			if ((businessInfos == null) || (businessInfos.size() == 0)) {
 				empty.setText("No Data Found, please check with  other data");
 			} else {
-				BusinessInfoAdapter bInfoAdapter = new BusinessInfoAdapter(
-						StoreList.this, businessInfos);
+				BusinessInfoAdapter bInfoAdapter = new BusinessInfoAdapter(StoreList.this, businessInfos);
 				setListAdapter(bInfoAdapter);
 			}
 		}
@@ -81,67 +86,113 @@ public class StoreList extends ListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Log.v(Constants.LOGTAG, " " + StoreList.CLASSTAG + " onCreate");
+		Log.i(Constants.LOGTAG, " " + StoreList.CLASSTAG + " onCreate");
 		this.setContentView(R.layout.storelist);
 		this.empty = (TextView) findViewById(R.id.empty);
 		final ListView listView = getListView();
 		listView.setItemsCanFocus(false);
 		listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 		listView.setEmptyView(this.empty);
+		
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
-			zipAdd = extras.getString("ZIPADD");
-			types = extras.getString("TYPES").equals("ANY")?"":"&"+extras.getString("TYPES");			
+			zipAdd = Utility.checkNullString(extras.getString("ZIPADD"));
+			if (!zipAdd.equals("") ){
+				names = Utility.checkNullString(extras.getString("NAMES"));
+				names = names.equals("ANY") ? "" : "&names=" + extras.getString("NAMES");
+				if (names.equals("")) {
+					types = Utility.checkNullString(extras.getString("TYPES"));
+					System.out.println("TYPES-->" + types);
+					types = (types.equals("ANY") || types.equals("null"))?"":"&types=" + types;
+				} else {
+					types = "&types=food";
+				}
+				Log.i(Constants.LOGTAG + StoreList.CLASSTAG, "zipadd--" + zipAdd + "--types--" + types + "--names--"
+						+ names);
+			}
 		}
 	}
 
-	@SuppressWarnings("unused")
 	@Override
 	protected void onResume() {
 		super.onResume();
 		iFetcher = new InformationFetcher();
-		 businessInfos = new ArrayList<BusinessInfo>();
-		/*
-		 * this.locationManager = (LocationManager)
-		 * getSystemService(Context.LOCATION_SERVICE); this.locationProvider =
-		 * this.locationManager.getProvider(LocationManager.GPS_PROVIDER); if
-		 * (this.locationProvider == null) { this.locationProvider =
-		 * this.locationManager.getProvider(LocationManager.NETWORK_PROVIDER); }
-		 * Log.v(Constants.LOGTAG, " " + StoreList.CLASSTAG +
-		 * "   locationProvider from criteria - "+ this.locationProvider); if
-		 * (this.locationProvider != null) {
-		 * this.locationManager.requestLocationUpdates
-		 * (this.locationProvider.getName(), 0, 0, this.locationListener); }
-		 * else { Log.e(Constants.LOGTAG, " " + StoreList.CLASSTAG +
-		 * "  NO LOCATION PROVIDER AVAILABLE"); Toast.makeText(this,
-		 * "Your application cannot continue, the GPS location provider is not available at this time."
-		 * , Toast.LENGTH_SHORT).show(); finish(); }
-		 */
+		businessInfos = new ArrayList<BusinessInfo>();
+		StringBuilder validationText = new StringBuilder();
+		boolean valid = true;
 		try {
-			if (zipAdd == null || zipAdd.equals("")) {
-//When search is done current location
-				// json = iFetcher.connect(URL, mLat.toString(),
-				// mLong.toString());
-				json = iFetcher.connect();
+			String urlQueryStr = "?LATLONG=39.9658560,-75.5271650";
+
+			if (zipAdd.equals("") ){
+				// TODO When search is done current location, get the current
+				// location and form the URLQUERYSTRING
+
+				urlQueryStr = "?LATLONG=" + getLatLong() +"&types=food";
+				Log.i(Constants.LOGTAG + StoreList.CLASSTAG, "URLQUERY STRING inside location based-->" + urlQueryStr);
+				json = iFetcher.connect(urlQueryStr);
 			} else {
-				//When search is done thru search page					
-		        Geocoder gc= new Geocoder(getBaseContext(), Locale.getDefault());
-		        String urlQueryStr = "";
-		        List<Address> addresses = gc.getFromLocationName(zipAdd , 1);
-//		        List<Address> addresses = gc.getFromLocationName("19380", 1);
-				Double latitude= addresses.get(0).getLatitude();
+				// When search is done thru search page
+				Geocoder gc = new Geocoder(getBaseContext(), Locale.getDefault());
+
+				List<Address> addresses = gc.getFromLocationName(zipAdd, 1);
+				Double latitude = addresses.get(0).getLatitude();
 				Double longitude = addresses.get(0).getLongitude();
-				
-				urlQueryStr = "?LATLONG=" +latitude+","+longitude +types;
-	        	System.out.println("-->" + urlQueryStr);				
+
+				urlQueryStr = "?LATLONG=" + latitude + "," + longitude + types + names;
+				Log.i(Constants.LOGTAG + StoreList.CLASSTAG, "URLQUERY STRING inside search based-->" + urlQueryStr);
 				json = iFetcher.connect(urlQueryStr);
 			}
-			fillData();
+			if (validJson()){
+				fillData();				
+			} else {
+				valid = false;
+				validationText.append(getResources().getString(R.string.unable_to_fetch_businesslist));
+			}
+
 		} catch (JSONException e) {
+			Log.i(Constants.LOGTAG + StoreList.CLASSTAG, "Inside JSONException");
 			e.printStackTrace();
+			validationText.append(getResources().getString(R.string.unable_to_fetch_businesslist));
+			valid = false;
 		} catch (IOException e) {
+			Log.i(Constants.LOGTAG + StoreList.CLASSTAG, "Inside IOExeption");
 			e.printStackTrace();
+			validationText.append(getResources().getString(R.string.unable_to_fetch_businesslist));
+			valid = false;
+		} catch (Exception e) {
+			Log.i(Constants.LOGTAG + StoreList.CLASSTAG, "Inside Exception");
+			e.printStackTrace();
+			validationText.append(getResources().getString(R.string.unable_to_fetch_businesslist));
+			valid = false;
 		}
+		if (!valid) {
+			Intent myIntent = new Intent(StoreList.this, StartNow.class);
+			myIntent.putExtra("ERROR_VALUE", "Unable to Fetch List of Businesses for this location");
+			StoreList.this.startActivity(myIntent);
+			setResult(RESULT_OK);			
+		}
+	}
+
+	@SuppressWarnings("unused")
+	private boolean validJson() {
+		boolean valid = true;
+		try {
+			JSONArray jsonarr = json.getJSONArray("businessInfo");
+			Log.i("jsonarr Array 1-->", new Integer(jsonarr.length()).toString());
+		} catch (JSONException ex) {
+			Log.i("Inside JSONException", ex.getMessage());			
+			valid = false;
+		}
+		try {
+			if (!valid) {
+				valid=true;
+				JSONObject jsonObj = json.getJSONObject("businessInfo");
+			}
+		}catch (JSONException ex) {
+			Log.i("Inside JSONException for Object", ex.getMessage());			
+			valid = false;
+		}
+		return valid;
 	}
 
 	protected void onListItemClick(ListView l, View v, int position, long id) {
@@ -154,36 +205,51 @@ public class StoreList extends ListActivity {
 		startActivity(intent);
 	}
 
-	private void fillData() throws JSONException {
+	private void fillData() throws Exception {
 		Log.v(Constants.LOGTAG, " " + StoreList.CLASSTAG + " filldata");
-		this.progressDialog = ProgressDialog.show(this, " Working...",
-				" Retrieving Businessless", true, false);
+		this.progressDialog = ProgressDialog.show(this, " Working...", " Retrieving Businessless", true, false);
+		UnCaughtExceptionHandler uceh = new UnCaughtExceptionHandler();
+		Thread.setDefaultUncaughtExceptionHandler(uceh);
+
 		new Thread() {
 			@Override
 			public void run() {
 				try {
 					getBusinessInfoObjects(json);
 					for (int k = 0; k < businessInfos.size(); k++) {
-						System.out.println("Businessinfo object-->"
-								+ businessInfos.get(k).name);
+						System.out.println("Businessinfo object-->" + businessInfos.get(k).name);
 					}
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+					progressDialog.dismiss();
+					throw new RuntimeException("Thrown from new Thread JSONException");
+				} catch (Throwable t) {
+					// TODO Auto-generated catch block
+					t.printStackTrace();
+					progressDialog.dismiss();
+					throw new RuntimeException("Thrown from new Thread Exception");
 				}
 				handler.sendEmptyMessage(0);
 			}
 		}.start();
 	}
 
+	class UnCaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
+		public void uncaughtException(Thread t, Throwable e) {
+			System.err.println("Throwable: " + e.getMessage());
+			System.err.println(t.toString());
+			filldata = false;
+		}
+	}
+
 	private void getBusinessInfoObjects(JSONObject json) throws JSONException {
 		boolean array = true;
 		JSONArray jsonarr = new JSONArray();
-		BusinessInfo bInfo = new BusinessInfo();
-		try{
+		try {
 			jsonarr = json.getJSONArray("businessInfo");
 			Log.i("jsonarr Array 1-->", new Integer(jsonarr.length()).toString());
-		}catch (JSONException ex) {
+		} catch (JSONException ex) {
 			array = false;
 		}
 		if (!array) {
@@ -191,7 +257,7 @@ public class StoreList extends ListActivity {
 			addBusinessInfo(jsonObj);
 		} else {
 			for (int j = 0; j < jsonarr.length(); j++) {
-				JSONObject jsonObj = jsonarr.getJSONObject(j);				
+				JSONObject jsonObj = jsonarr.getJSONObject(j);
 				addBusinessInfo(jsonObj);
 			}
 		}
@@ -211,10 +277,11 @@ public class StoreList extends ListActivity {
 		bInfo.phone = jsonObjAdd.getString("phone");
 		JSONObject jsonObjCat = jsonObj.getJSONObject("businessCatalog");
 		bInfo.catalogid = jsonObjCat.getString("id");
+		bInfo.imgLocation = jsonObj.getString("imageLocation");
 		// returnArray[j] = bInfo.toString();
 		businessInfos.add(bInfo);
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
@@ -233,8 +300,7 @@ public class StoreList extends ListActivity {
 	}
 
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v,
-			ContextMenuInfo menuInfo) {
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
 		menu.add(0, DELETE_ID, 0, R.string.menu_delete);
 	}
@@ -243,8 +309,7 @@ public class StoreList extends ListActivity {
 	public boolean onContextItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case DELETE_ID:
-			AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
-					.getMenuInfo();
+			AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
 			/*
 			 * mDbHelper.deleteNote(info.id); fillData();
 			 */
@@ -254,29 +319,15 @@ public class StoreList extends ListActivity {
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode,
-			Intent intent) {
+	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		super.onActivityResult(requestCode, resultCode, intent);
 		/* fillData(); */
 	}
-
-	private final LocationListener locationListener = new LocationListener() {
-
-		public void onLocationChanged(Location loc) {
-			mLat = loc.getLatitude();
-			mLong = loc.getLongitude();
-			Log.v(StoreList.CLASSTAG, "Lat+Long" + mLat + "--" + mLong);
-
-		}
-
-		public void onProviderDisabled(final String s) {
-		}
-
-		public void onProviderEnabled(final String s) {
-		}
-
-		public void onStatusChanged(final String s, final int i, final Bundle b) {
-		}
-	};
+	
+	private String getLatLong() {
+		LocationHelper lh = new LocationHelper();
+		String latLong = lh.getCurrentLocation(getBaseContext());
+		return latLong;
+	}	
 
 }

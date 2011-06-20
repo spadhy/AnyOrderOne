@@ -1,10 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, OrderSelect!</string>
+    <!-- LABELS -->
     <string name="app_name">AnyOrderOne</string>
+    <string name="ordernow_screen">"Order on your mobile device"</string>
+    <string name="businesslist_screen">"Business List based on your Search"</string>
+    <string name="itemlist_screen">"Item List By Category, Choose a Category"</string>    
+    <string name="itemchoice_screen">"Select choices for the Item selected"</string>    
+    <!-- LABELS END -->
+    
+    <!-- NORMAL TEXT  -->
+    <string name="selChoice">How do you want to start, choose below</string>
+    <string name="hello">Hello World, OrderSelect!</string>
+    <!-- NORMAL TEXT  END-->    
+    
     <string name="SelectRest">Search for your restaurant</string>
     <string name="AllRest">All Restaurants in your location</string>
-    <string name="selChoice">Select your choice</string>
 	<string name="textMap">textMap</string>    
     <string name="Latitude">Latitude</string>
     <string name="Longitude">Longitude</string>
@@ -17,6 +27,7 @@
     <string name="confirm">Confirm</string>
     <string name="edit_note">Edit Note</string>    
     <string name="order_now">Order now</string>   
+    <string name="order_place">Place your order</string>    
     <string name="show_on_map">Show on Map</string>
     <string name="call_now">Call now</string>
     
@@ -35,6 +46,8 @@
 <!-- ALL MESSAGE STRINGs -->    
     <string name="location_not_supplied_message">Search location was not specified</string>
     <string name="alert_title">Something wrong</string>    
+	<string name="unable_to_fetch_businesslist">Unable to Fetch Business List at this point in time</string>  
+	<string name="invalid_zip_supplied">Invalid Zip supplied, please retry</string>
     
     
 </resources>

@@ -1,33 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="com.anyorderone"
-      android:versionCode="1"
-      android:versionName="1.0">
-    <uses-permission android:name="android.permission.INTERNET" />
-	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />  
-	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />  
+	package="com.anyorderone" android:versionCode="1" android:versionName="1.0">
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 	<uses-permission android:name="android.permission.CALL_PHONE" />
-		
-    <application android:icon="@drawable/icon" android:label="@string/app_name" android:name=".AnyOrderApplication">
+
+	<application android:icon="@drawable/wave_45"
+		android:label="@string/app_name" android:name=".AnyOrderApplication">
 		<uses-library android:name="com.google.android.maps" />
-        <activity android:name=".OrderNow"
-                  android:label="@string/app_name">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".AllStore"
-                  android:label="@string/app_name" android:theme="@android:style/Theme.NoTitleBar" />
-        <activity android:name=".GPSmap"
-                  android:label="@string/app_name" android:theme="@android:style/Theme.NoTitleBar" />
-        <activity android:name=".StoreDetails"
-                  android:label="@string/app_name" android:theme="@android:style/Theme.NoTitleBar" />
-        <activity android:name=".StoreList"
-                  android:label="@string/app_name" android:theme="@android:style/Theme.NoTitleBar" />                  
-        <activity android:name=".ItemListByCategory"
-                  android:label="@string/app_name" android:theme="@android:style/Theme.NoTitleBar" />      
-        <activity android:name=".StoreSearch"
-                  android:label="@string/app_name" android:theme="@android:style/Theme.NoTitleBar" />                                  
-    </application>
+		<activity android:name=".StartNow" android:label="@string/ordernow_screen"
+			android:theme="@style/CustomTheme">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+		<activity android:name=".BusinessList" android:label="@string/businesslist_screen"
+			android:theme="@style/CustomTheme" />
+		<activity android:name=".ItemListByCategory" android:label="@string/itemlist_screen"
+			android:theme="@style/CustomTheme" />
+		<activity android:name=".ItemAttrSelect" android:label="@string/itemchoice_screen"
+			android:theme="@style/CustomTheme">
+		</activity>
+		<activity android:name=".OrderNow" android:label="@string/ordernow_screen"
+			android:theme="@style/CustomTheme">
+		</activity>
+		<activity android:name=".ItemCart" android:label="@string/app_name"
+			android:theme="@style/CustomTheme" />
+		<activity android:name=".AllStore" android:label="@string/app_name"
+			android:theme="@android:style/Theme.NoTitleBar" />
+		<activity android:name=".GPSmap" android:label="@string/app_name"
+			android:theme="@android:style/Theme.NoTitleBar" />
+		<activity android:name=".StoreDetails" android:label="@string/app_name"
+			android:theme="@android:style/Theme.NoTitleBar" />
+		<activity android:name=".StoreList" android:label="@string/app_name"
+			android:theme="@android:style/Theme.NoTitleBar" />
+		<activity android:name=".StoreSearch" android:label="@string/app_name"
+			android:theme="@android:style/Theme.NoTitleBar" />
+		<activity android:name="ExpandableListSample" android:label="@string/app_name"
+			android:theme="@android:style/Theme.NoTitleBar" />
+		<activity android:name=".ElistCBox" android:label="@string/app_name"
+			android:theme="@android:style/Theme.NoTitleBar" />
+		<activity android:name=".TableLayout7" android:label="@string/app_name"
+			android:theme="@android:style/Theme.NoTitleBar" />
+		<activity android:name=".RadioGroup1" android:label="@string/app_name"
+			android:theme="@android:style/Theme.NoTitleBar" />
+		<activity android:name=".Media" android:label="@string/app_name"
+			android:theme="@android:style/Theme.NoTitleBar" />
+		<activity android:name=".Rotate3dAnimation" android:label="@string/app_name"
+			android:theme="@android:style/Theme.NoTitleBar" />
+		<activity android:name=".RotateTest" android:label="@string/app_name"
+			android:theme="@android:style/Theme.NoTitleBar" />
+		<activity android:name=".ListFlipper" android:label="@string/app_name"
+			android:theme="@android:style/Theme.NoTitleBar" />
+	</application>
 </manifest>
